@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  app:
+    image: jyavros/ranked-domain:latest
+    ports:
+      - "10202:10202"
+    depends_on:
+      - mongo
+  mongo:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: "admin"
+      MONGO_INITDB_ROOT_PASSWORD: "password"
+      MONGO_INITDB_DATABASE: "ranked_domain"
+
