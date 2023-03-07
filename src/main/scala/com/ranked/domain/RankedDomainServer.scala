@@ -5,6 +5,7 @@ import akka.http.scaladsl.Http
 import com.ranked.domain.client.{TrustpilotHttpClient, VstatHttpClient}
 import com.ranked.domain.config.RankedDomainConfig
 import com.typesafe.config.ConfigFactory
+import com.typesafe.scalalogging.Logger
 import org.mongodb.scala.MongoClient
 
 import scala.concurrent.ExecutionContextExecutor
@@ -14,6 +15,7 @@ object RankedDomainServer extends App {
   implicit private val system: ActorSystem                        = ActorSystem()
   implicit private val executionContext: ExecutionContextExecutor = system.dispatcher
 
+  private val logger                    = Logger.apply(getClass.getName)
   private val config                    = ConfigFactory.load()
   private val rdConfig                  = RankedDomainConfig(config)
   private val mongoClient: MongoClient  = MongoClient(rdConfig.dbHost)
@@ -36,10 +38,10 @@ object RankedDomainServer extends App {
 
   Http().newServerAt("0.0.0.0", 10202).bind(routes)
 
-  println(s"Server online at http://0.0.0.0:10202/")
+  logger.info(s"Server online at http://0.0.0.0:10202/")
 
   system.whenTerminated.onComplete { _ =>
-    println(s"Server stops")
+    logger.info(s"Server stops")
 
     cancellable.cancel()
     system.terminate()

@@ -26,6 +26,9 @@ libraryDependencies ++= Seq(
 )
 libraryDependencies += "io.spray" %% "spray-json" % "1.3.6"
 libraryDependencies += "org.mongodb.scala" %% "mongo-scala-driver" % "4.9.0"
+libraryDependencies += "com.typesafe.scala-logging" %% "scala-logging" % "3.9.4"
+libraryDependencies += "io.lemonlabs" %% "scala-uri" % "4.0.3"
+libraryDependencies += "ch.qos.logback" % "logback-classic" % "1.2.10"
 
 resolvers ++= Seq(
   "Typesafe repository" at "https://repo.typesafe.com/typesafe/releases/",

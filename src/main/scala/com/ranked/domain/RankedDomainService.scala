@@ -29,11 +29,12 @@ class DefaultRankedDomainService(rankedDomainRepository: RankedDomainRepository,
     categoryPageData
       .pageProps
       .recentlyReviewedBusinessUnits
+      .filter(_.review.nonEmpty)
       .map(domain => vstatClient.getTrafficCount(domain.identifyingName).map(toDomainData(domain, category)))
   }
 
   private def toDomainData(domainData: RecentlyReviewedBusinessUnitsData, category: String)(trafficData: VstatData): DomainData = {
-    DomainData(domainData.identifyingName, domainData.review, domainData.numberOfReviews, trafficData.traffic, category)
+    DomainData(domainData.identifyingName, domainData.review.get, domainData.numberOfReviews, trafficData.traffic, category)
   }
 
   override def getRankedDomainList: Future[Seq[DomainData]] =

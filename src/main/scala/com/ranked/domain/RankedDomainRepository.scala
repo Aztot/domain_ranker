@@ -1,6 +1,7 @@
 package com.ranked.domain
 
 import com.ranked.domain.model.DomainData
+import com.typesafe.scalalogging.Logger
 import org.mongodb.scala.model.Filters._
 import org.mongodb.scala.model.Sorts._
 import org.mongodb.scala.model.Updates._
@@ -20,6 +21,8 @@ trait RankedDomainRepository {
 
 class DefaultRankedDomainRepository(mongoClient: MongoClient)
                                    (implicit ec: ExecutionContext) extends RankedDomainRepository {
+
+  private val logger: Logger = Logger.apply(getClass.getName)
 
   private val database: MongoDatabase =
     mongoClient.getDatabase("ranked_domain").withCodecRegistry(DomainData.codecRegistry)
@@ -55,7 +58,7 @@ class DefaultRankedDomainRepository(mongoClient: MongoClient)
       .map(_ => ())
       .recover {
         case e: MongoWriteException if e.getMessage.contains("E11000 duplicate key error collection") =>
-          println(s"Data with id ${domainData._id.toString} is already exists, domain is: ${domainData.domain}, category: ${domainData.category}")
+          logger.info(s"Data with id ${domainData._id.toString} is already exists, domain is: ${domainData.domain}, category: ${domainData.category}")
         case _ =>
           ()
       }

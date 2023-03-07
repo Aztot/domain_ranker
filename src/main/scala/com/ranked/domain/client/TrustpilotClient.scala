@@ -17,11 +17,10 @@ class TrustpilotHttpClient(implicit ec: ExecutionContext, as: ActorSystem)
   extends TrustpilotClient with RankedDomainJsonProtocol {
 
   def getLatestReviewedDomains(category: String): Future[TrustpilotCategoryPageData] = {
-    val vstatUri =
+    val trustpilotUri =
       "https://www.trustpilot.com/_next/data/categoriespages-consumersite-3487/categories/" + category + ".json?sort=latest_review&categoryId=" + category
 
-    val responseFuture: Future[HttpResponse] = Http()
-      .singleRequest(HttpRequest(uri = vstatUri))
+    val responseFuture: Future[HttpResponse] = Http().singleRequest(HttpRequest(uri = trustpilotUri))
 
 
     responseFuture.flatMap {
